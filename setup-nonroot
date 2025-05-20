@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+'cache-curl' 'https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh' | sh -s -- -y
+
+bash -l <<-'EOF'
+	set -euxo pipefail
+
+	'cache-elan' `curl 'https://api.github.com/repos/leanprover/lean4/tags' | grep 'name' | sed 's/.*"name": "\([^"]*\)".*/\1/' | grep -v 'rc' | sort -r | head -1`
+EOF
